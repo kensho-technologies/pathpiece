@@ -1,0 +1,252 @@
+text
+"HTC's Vive Pro headset is available to pre-order for $799
+
+We've seen plenty of Beats-focused KIRFs in our time, some better than others. Few, however, play quite so directly on the name as OrigAudio's Beets. For $25, adopters get a set of headphones that bear little direct resemblance to Dr. Dre's audio gear of choice, but are no doubt bound to impress friends -- at least, up until they see a root vegetable logo instead of a lower-case B. Thankfully, there's more to it than just amusing and confusing peers. Every purchase will lead to a donation of canned beets (what else?) to the Second Harvest Food Bank of Orange County. For us, that's reason enough to hope that Beats doesn't put the kibosh on OrigAudio's effort. Besides, we could use some accompaniment for our BeetBox."
+"Q:
+
+NullPointerException in getview of custom adapter
+
+I'm getting image from bitmap method and trying to populate the listview. But when i call the bitmap function inside getview the nullpointerException error occurs. please help me... 
+here is my view Activity class:
+public class Viewactivity extends Activity{
+
+    TextView tv;
+    ImageView im;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.views);
+
+        ListView mListView = (ListView)findViewById(R.id.listView);
+        //array houlds all images
+        int Images[] = new int[]{
+            R.drawable.confidential,
+            ...     
+            };
+        //array holds all strings to be drawn in the image
+
+        CustomList adaptor = new CustomList(this , Images);
+        mListView.setAdapter(adaptor);
+
+    }
+
+    public Bitmap ProcessingBitmap(int image) {
+        // TODO Auto-generated method stub
+        Bitmap bm1 = null;
+        Bitmap newBitmap = null;
+
+        final String data =getIntent().getExtras().getString(""keys"");
+        bm1 = ((BitmapDrawable) Viewactivity.this.getResources()
+                .getDrawable(image)).getBitmap();
+        Config config = bm1.getConfig();
+        if(config == null){
+            config = Bitmap.Config.ARGB_8888;
+        }
+
+        newBitmap = Bitmap.createBitmap(bm1.getWidth(), bm1.getHeight(),config);
+        Canvas newCanvas = new Canvas(newBitmap);
+
+        newCanvas.drawBitmap(bm1, 0, 0, null);
+
+        if(data != null){
+            Paint paintText = new Paint(Paint.ANTI_ALIAS_FLAG);
+            paintText.setColor(Color.RED);
+            paintText.setTextSize(300);
+            // paintText.setTextAlign(Align.CENTER);
+            paintText.setStyle(Style.FILL);
+            paintText.setShadowLayer(10f, 10f, 10f, Color.BLACK);
+
+            Rect rectText = new Rect();
+            paintText.getTextBounds(data, 0, data.length(), rectText);
+            paintText.setTextScaleX(1.f);
+
+            newCanvas.drawText(data, 
+              0, rectText.height(), paintText);
+
+            Toast.makeText(getApplicationContext(), 
+              ""drawText: "" + data, Toast.LENGTH_LONG).show();
+
+        }else{
+            Toast.makeText(getApplicationContext(), 
+              ""caption empty!"", Toast.LENGTH_LONG).show();
+        }
+        return newBitmap;
+
+    }
+}
+
+this is my adapter class:
+public class CustomList extends BaseAdapter{
+
+    Viewactivity act;
+    int[] IMAGES;
+    LayoutInflater inflator;
+    Context sContext;
+    //private String[] TEXTS;
+
+    public CustomList(Context context, int[] images){
+        this.IMAGES = images;
+        //this.TEXTS = texts;
+        this.sContext = context;
+        inflator = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    @Override
+    public int getCount() {
+        // TODO Auto-generated method stub
+        return IMAGES.length;
+    }
+
+    @Override
+    public Object getItem(int position) {
+        // TODO Auto-generated method stub
+        return position;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        // TODO Auto-generated method stub
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        // TODO Auto-generated method stub
+        View v = inflator.inflate(R.layout.row_list, parent, false);
+        final ImageView imageView = (ImageView) v.findViewById(R.id.imageView);
+        imageView.setImageBitmap(act.ProcessingBitmap(IMAGES[position]));// line no:52
+        return imageView;
+    }
+}
+
+this is my logcat:
+12-18 06:16:51.406: E/AndroidRuntime(1388): FATAL EXCEPTION: main
+12-18 06:16:51.406: E/AndroidRuntime(1388): Process: com.emple.example, PID: 1388
+12-18 06:16:51.406: E/AndroidRuntime(1388): java.lang.NullPointerException
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at com.emple.example.CustomList.getView(CustomList.java:52)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.widget.AbsListView.obtainView(AbsListView.java:2263)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.widget.ListView.measureHeightOfChildren(ListView.java:1263)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.widget.ListView.onMeasure(ListView.java:1175)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.view.View.measure(View.java:16497)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.widget.RelativeLayout.measureChild(RelativeLayout.java:689)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.widget.RelativeLayout.onMeasure(RelativeLayout.java:473)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.view.View.measure(View.java:16497)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.view.ViewGroup.measureChildWithMargins(ViewGroup.java:5125)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.widget.FrameLayout.onMeasure(FrameLayout.java:310)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.view.View.measure(View.java:16497)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.view.ViewGroup.measureChildWithMargins(ViewGroup.java:5125)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at com.android.internal.widget.ActionBarOverlayLayout.onMeasure(ActionBarOverlayLayout.java:327)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.view.View.measure(View.java:16497)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.view.ViewGroup.measureChildWithMargins(ViewGroup.java:5125)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.widget.FrameLayout.onMeasure(FrameLayout.java:310)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at com.android.internal.policy.impl.PhoneWindow$DecorView.onMeasure(PhoneWindow.java:2291)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.view.View.measure(View.java:16497)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.view.ViewRootImpl.performMeasure(ViewRootImpl.java:1916)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.view.ViewRootImpl.measureHierarchy(ViewRootImpl.java:1113)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.view.ViewRootImpl.performTraversals(ViewRootImpl.java:1295)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.view.ViewRootImpl.doTraversal(ViewRootImpl.java:1000)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.view.ViewRootImpl$TraversalRunnable.run(ViewRootImpl.java:5670)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.view.Choreographer$CallbackRecord.run(Choreographer.java:761)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.view.Choreographer.doCallbacks(Choreographer.java:574)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.view.Choreographer.doFrame(Choreographer.java:544)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.view.Choreographer$FrameDisplayEventReceiver.run(Choreographer.java:747)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.os.Handler.handleCallback(Handler.java:733)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.os.Handler.dispatchMessage(Handler.java:95)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.os.Looper.loop(Looper.java:136)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at android.app.ActivityThread.main(ActivityThread.java:5017)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at java.lang.reflect.Method.invokeNative(Native Method)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at java.lang.reflect.Method.invoke(Method.java:515)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:779)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:595)
+12-18 06:16:51.406: E/AndroidRuntime(1388):     at dalvik.system.NativeStart.main(Native Method)
+12-18 06:21:51.616: I/Process(1388): Sending signal. PID: 1388 SIG: 9
+
+A:
+
+You haven't initialized your act variable. Init it in your adapter constructor.
+Something like:
+public CustomList(Viewactivitty act, int[] images){
+    this.act = act;
+    this.IMAGES = images;
+    //this.TEXTS = texts;
+    this.sContext = act;
+    inflator = (LayoutInflater)act.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+}
+
+"
+"Syringocystadenoma papilliferum of the cervix presenting as vulvar growth in an adolescent girl.
+Syringocystadenoma papilliferum (SCP) is a rare, benign, adnexal tumour of apocrine or eccrine differentiation. It is commonly located on head and neck region. We report the case of an 18-year-old woman who presented with a vulvar lobulated growth that was found to arise from the posterior lip of cervix. Histopathological examination revealed the diagnosis of SCP. To our knowledge, SCP arising from the cervix has never been reported previously in the literature, thus we believe this to be the first case of SCP arising from the posterior lip of the cervix."
+"The basic goal of the effective altruism movement is to create efficient philanthropic change by backing programs and innovations that are cost-effective so that each dollar given impacts as many people as possible. The underlying tenet is that donor dollars are a limited resource, but dollars are just one of the limiting factors. There’s still another major resource that needs to be accounted for: research time.
+
+There’s a learning curve for calculation-driven cause groups (and donors) to figure out what world-plaguing problems really are the most pressing, what solutions seem the most promising or neglected, and what else might need to be done. The problem is there hasn’t been a single resource for accessing all this information in one place.
+
+To change that, Rethink Priorities, an initiative of the effective altruism awareness and engagement building nonprofit Rethink Charity, has launched Priority Wiki, a publicly editable Wikipedia-like online encyclopedia for cause prioritization wonks. It collects and categorizes vetted research around pressing charitable causes and potential interventions.
+
+“This is a big problem because thousands of hours are going into this kind of research, and you don’t want people to forget it exists, or maybe try to duplicate efforts, or just not even remember it,” says Peter Hurford, who codeveloped the wiki alongside colleague Marcus Davis. “We’re trying to capture all relevant research under a wide variety of global issues so that everyone can have a go-to spot to get up to speed.”
+
+To do that, Wiki is organized into six broad types of causes. That includes “Existential/Catastrophic Future Risks,” “Improving Research,” “Decisions and Values,” “Improving Policy,” “Developing World Health and Economic Development,” “Developed World Health and Economic Development,” and “Specific Scientific Research.” Each entry is then comprised of related topics. Under the catastrophe heading, for instance, there’s biosecurity, nuclear security, climate change, and geomagnetic storms.
+
+As the developers explain in an open letter about their efforts, the wiki is currently populated with a collection of research by effective altruism research organizations including Open Philanthropy, GiveWell, 80,000 Hours, and Animal Charity Evaluators. Many of these are formatted in what’s commonly referred to as a “shallow review,” or high-level overview of each issue, and various important statistics and findings. “That gives you a lot of opportunities to dive into the problem and make a more structured way than dumping someone a 60-item reading list,” says Hurford.
+
+Contributors are already revising the content and sharing data about things the originators hadn’t considered. Two recent additions include information about psychedelics and drug reform, and how to prevent or reduce aging-related diseases to extend our natural lifespan."
+"Essays
+
+Philosophers who think everyday morality is objective should examine the evidence, argues Joshua Knobe.
+
+Imagine two people discussing a question in mathematics. One of them says “7,497 is a prime number,” while the other says, “7,497 is not a prime number.” In a case like this one, we would probably conclude that there can only be a single right answer. We might have a lot of respect for both participants in the conversation, we might agree that they are both very reasonable and conscientious, but all the same, one of them has got to be wrong. The question under discussion here, we might say, is perfectly objective.
+
+But now suppose we switch to a different topic. Two people are talking about food. One of them says “Don’t even think about eating caterpillars! They are totally disgusting and not tasty at all,” while the other says “Caterpillars are a special delicacy – one of the tastiest, most delectable foods a person can ever have occasion to eat.” In this second case, we might have a very different reaction. We might think that there isn’t any single right answer. Maybe caterpillars are just tasty for some people but not for others. This latter question, we might think, should be understood as relative.
+
+Now that we’ve got at least a basic sense for these two categories, we can turn to a more controversial case. Suppose that the two people are talking about morality. One of them says “That action is deeply morally wrong,” while the other is speaking about the very same action and says “That action is completely fine – not the slightest thing to worry about.” In a case like this, one might wonder what reaction would be most appropriate. Should we say that there is a single right answer and anyone who says the opposite must be mistaken, or should we say that different answers could be right for different people? In other words, should we say that morality is something objective or something relative?
+
+This is a tricky question, and it can be difficult to see how one might even begin to address it. Faced with an issue like this one, where exactly should we look for evidence?
+
+Though philosophers have pursued numerous approaches here, one of the most important and influential is to begin with certain facts about people’s ordinary moral practices. The idea is that we can start out with facts about people’s usual ways of thinking or talking and use these facts to get some insight into questions about the true nature of morality.
+
+Thinkers who take this approach usually start out with the assumption that ordinary thought and talk about morality has an objectivist character. For example, the philosopher Michael Smith claims that
+
+we seem to think moral questions have correct answers; that the correct answers are made correct by objective moral facts; that moral facts are wholly determined by circumstances and that, by engaging in moral conversation and argument, we can discover what these objective moral facts determined by the circumstances are.
+
+And Frank Jackson writes:
+
+I take it that it is part of current folk morality that convergence will or would occur. We have some kind of commitment to the idea that moral disagreements can be resolved by sufficient critical reflection – which is why we bother to engage in moral debate. To that extent, some sort of objectivism is part of current folk morality.
+
+Then, once one has in hand this claim about people’s ordinary understanding, the aim is to use it as part of a complex argument for a broader philosophical conclusion. It is here that philosophical work on these issues really shines, with rigorous attention to conceptual distinctions and some truly ingenious arguments, objections and replies. There is just one snag. The trouble is that no real evidence is ever offered for the original assumption that ordinary moral thought and talk has this objective character. Instead, philosophers tend simply to assert that people’s ordinary practice is objectivist and then begin arguing from there.
+
+If we really want to go after these issues in a rigorous way, it seems that we should adopt a different approach. The first step is to engage in systematic empirical research to figure out how the ordinary practice actually works. Then, once we have the relevant data in hand, we can begin looking more deeply into the philosophical implications – secure in the knowledge that we are not just engaging in a philosophical fiction but rather looking into the philosophical implications of people’s actual practices.
+
+Just in the past few years, experimental philosophers have been gathering a wealth of new data on these issues, and we now have at least the first glimmerings of a real empirical research program here. But a funny thing happened when people started taking these questions into the lab. Again and again, when researchers took up these questions experimentally, they did not end up confirming the traditional view. They did not find that people overwhelmingly favoured objectivism. Instead, the results consistently point to a more complex picture. There seems to be a striking degree of conflict even in the intuitions of ordinary folks, with some people under some circumstances offering objectivist answers, while other people under other circumstances offer more relativist views. And that is not all. The experimental results seem to be giving us an ever deeper understanding of why it is that people are drawn in these different directions, what it is that makes some people move toward objectivism and others toward more relativist views.
+
+For a nice example from recent research, consider a study by Adam Feltz and Edward Cokely. They were interested in the relationship between belief in moral relativism and the personality trait openness to experience. Accordingly, they conducted a study in which they measured both openness to experience and belief in moral relativism. To get at people’s degree of openness to experience, they used a standard measure designed by researchers in personality psychology. To get at people’s agreement with moral relativism, they told participants about two characters – John and Fred – who held opposite opinions about whether some given act was morally bad. Participants were then asked whether one of these two characters had to be wrong (the objectivist answer) or whether it could be that neither of them was wrong (the relativist answer). What they found was a quite surprising result. It just wasn’t the case that participants overwhelmingly favoured the objectivist answer. Instead, people’s answers were correlated with their personality traits. The higher a participant was in openness to experience, the more likely that participant was to give a relativist answer.
+
+Geoffrey Goodwin and John Darley pursued a similar approach, this time looking at the relationship between people’s belief in moral relativism and their tendency to approach questions by considering a whole variety of possibilities. They proceeded by giving participants mathematical puzzles that could only be solved by looking at multiple different possibilities. Thus, participants who considered all these possibilities would tend to get these problems right, whereas those who failed to consider all the possibilities would tend to get the problems wrong. Now comes the surprising result: those participants who got these problems right were significantly more inclined to offer relativist answers than were those participants who got the problems wrong.
+
+Taking a slightly different approach, Shaun Nichols and Tricia Folds-Bennett looked at how people’s moral conceptions develop as they grow older. Research in developmental psychology has shown that as children grow up, they develop different understandings of the physical world, of numbers, of other people’s minds. So what about morality? Do people have a different understanding of morality when they are twenty years old than they do when they are only four years old? What the results revealed was a systematic developmental difference. Young children show a strong preference for objectivism, but as they grow older, they become more inclined to adopt relativist views. In other words, there appears to be a developmental shift toward increasing relativism as children mature. (In an exciting new twist on this approach, James Beebe and David Sackris have shown that this pattern eventually reverses, with middle-aged people showing less inclination toward relativism than college students do.)
+
+So there we have it. People are more inclined to be relativists when they score highly in openness to experience, when they have an especially good ability to consider multiple possibilities, when they have matured past childhood (but not when they get to be middle-aged). Looking at these various effects, my collaborators and I thought that it might be possible to offer a single unifying account that explained them all. Specifically, our thought was that people might be drawn to relativism to the extent that they open their minds to alternative perspectives. There could be all sorts of different factors that lead people to open their minds in this way (personality traits, cognitive dispositions, age), but regardless of the instigating factor, researchers seemed always to be finding the same basic effect. The more people have a capacity to truly engage with other perspectives, the more they seem to turn toward moral relativism.
+
+To really put this hypothesis to the test, Hagop Sarkissian, Jennifer Wright, John Park, David Tien and I teamed up to run a series of new studies. Our aim was to actually manipulate the degree to which people considered alternative perspectives. That is, we wanted to randomly assign people to different conditions in which they would end up thinking in different ways, so that we could then examine the impact of these different conditions on their intuitions about moral relativism.
+
+Participants in one condition got more or less the same sort of question used in earlier studies. They were asked to imagine that someone in the United States commits an act of infanticide. Then they were told to suppose that one person from their own college thought that this act was morally bad, while another thought that it was morally permissible. The question then was whether they would agree or disagree with the following statement:
+
+Since your classmate and Sam have different judgments about this case, at least one of them must be wrong.
+
+Participants in the other conditions received questions aimed at moving their thinking in a different direction. Those who had been assigned to the “other culture” condition were told to imagine an Amazonian tribe, the Mamilons, which had a very different way of life from our own. They were given a brief description of this tribe’s rituals, values and modes of thought. Then they were told to imagine that one of their classmates thought that the act of infanticide was morally bad, while someone from this Amazonian tribe thought that the act was morally permissible. These participants were then asked whether they agreed or disagreed with the corresponding statement:
+
+Since your classmate and the Mamilon have different judgments about this case, at least one of them must be wrong.
+
+Finally, participants in the “extraterrestrial” condition were told about a culture that was just about as different from our own as can possibly be conceived. They were asked to imagine a race of extraterrestrial beings, the Pentars, who have no interest in friendship, love or happiness. Instead, the Pentars’ only goal is to maximise the total number of equilateral pentagons in the universe, and they move through space doing everything in their power to achieve this goal. (If a Pentar becomes too old to work, she is immediately killed and transformed into a pentagon herself.) As you might guess, these participants were then told to imagine a Pentar who thinks that the act of infanticide is morally permissible. Then came the usual statement:
+
+Since your classmate and the Pentar have different judgments about this case, at least one of them must be wrong.
+
+The results of the study showed a systematic difference between conditions. In particular, as we moved toward more distant cultures, we found a steady shift toward more relativist answers – with people in the first condition tending to agree with the statement that at least one of them had to be wrong, people in the second being pretty evenly split between the two answers, and people in the third tending to reject the statement quite decisively.
+
+Note that all participants in the study are considering judgments about the very same act. There is just a single person, living in the United States, who is performing an act of infanticide, and participants are being asked to consider different judgments one might make about that very same act. Yet, when participants are asked to consider individuals who come at the issue from wildly different perspectives, they end up concluding that these individuals could have opposite opinions without either of them being in any way wrong. This result seems strongly to suggest that people can be drawn under certain circumstances to a form of moral relativism.
+
+But now we face a new question. If we learn that people’s ordinary practice is not an objectivist one – that it actually varies depending on the degree to which people take other perspectives into account – how can we then use this information to address the deeper philosophical issues about the true nature of morality?
+
+The answer here is in one way very complex and in another very simple. It is complex in that one can answer such questions only by making use of very sophisticated and subtle philosophical methods. Yet, at the same time, it is simple in that such methods have already been developed and are being continually refined and elaborated within the literature in analytic philosophy. The trick now is just to take these methods and apply them to working out the implications of an ordinary practice that actually exists.
+
+Share This
+"
