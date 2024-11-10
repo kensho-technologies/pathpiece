@@ -1,3 +1,5 @@
+// Copyright 2023-present Kensho Technologies, LLC.
+
 pub mod globals {
     pub const SEED: u64 = 42;
 

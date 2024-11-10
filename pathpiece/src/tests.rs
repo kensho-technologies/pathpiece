@@ -1,3 +1,5 @@
+// Copyright 2023-present Kensho Technologies, LLC.
+
 #[cfg(test)]
 mod tests {
     use crate::Tokenizer;

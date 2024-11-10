@@ -1,3 +1,5 @@
+# Copyright 2023-present Kensho Technologies, LLC.
+
 import sys
 import time
 import pandas as pd
